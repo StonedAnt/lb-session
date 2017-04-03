@@ -1,0 +1,13 @@
+---
+
+- hosts: lua_servers
+  vars:
+    server_root: /srv/lua-servers
+    pool_name: luaservers
+  remote_user: root
+
+  roles:
+      - { role: "util", util_cmd: "get" }
+      - { role: "luaserver" }
+      - { role: "util", util_cmd: "add"}
+      - { role: "util", util_cmd: "drain"}

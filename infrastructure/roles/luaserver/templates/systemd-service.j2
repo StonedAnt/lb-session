@@ -1,0 +1,13 @@
+[Unit]
+Description=Lua ASAPP Server
+After=network-online.target
+
+[Service]
+User=root
+WorkingDirectory={{ server_root }}/{{ unique_server_dir_name }}
+ExecStart=/usr/local/bin/lapis server
+ExecStop=/usr/local/bin/lapis term
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

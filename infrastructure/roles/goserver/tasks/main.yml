@@ -1,0 +1,28 @@
+---
+
+- name: Debug server info
+  debug: var=pool_server_info
+
+- name: Debug unique_server_dir_name
+  debug: var=unique_server_dir_name
+
+- name: Create deployment dir for new release
+  file:
+    path: "{{ server_root }}/{{ unique_server_dir_name }}"
+    state: directory
+
+- name: Upload release archive
+  unarchive:
+    copy: yes
+    src: files/go-server.zip
+    dest: "{{ server_root }}/{{ unique_server_dir_name }}"
+
+- name: Create systemd service go-server@{{ pool_server_next_port }}.service
+  template:
+    src: roles/goserver/templates/systemd-service.j2
+    dest: /lib/systemd/system/go-server@{{ pool_server_next_port }}.service
+
+- name: Start go-server@{{ pool_server_next_port }}.service
+  shell: |
+    systemctl enable go-server@{{ pool_server_next_port }}.service
+    systemctl start go-server@{{ pool_server_next_port }}.service

@@ -1,0 +1,24 @@
+Examples of managing pool status with Nginx Plus API
+---------------------------------------------------------
+
+root@rava01:~# curl  http://127.0.0.1:8000/upstream_conf?upstream=pyservers
+server 127.0.0.1:12000; # id=0
+root@rava01:~# curl  http://127.0.0.1:8000/upstream_conf?upstream=pyservers
+server 127.0.0.1:12000; # id=0 draining
+server 127.0.0.1:12001; # id=1
+root@rava01:~# curl  http://127.0.0.1:8000/upstream_conf?upstream=pyservers
+server 127.0.0.1:12001; # id=1
+root@rava01:~# curl  http://127.0.0.1:8001/upstream_conf?upstream=luaservers
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=pyservers
+server 127.0.0.1:12001; # id=1
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=goservers
+server 127.0.0.1:10002; # id=0
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=luaservers
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=luaservers
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=luaservers
+server 127.0.0.1:11000; # id=0
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=luaservers
+server 127.0.0.1:11000; # id=0 draining
+server 127.0.0.1:11001; # id=1
+root@rava01:~# curl  http://127.0.0.1:8002/upstream_conf?upstream=luaservers
+server 127.0.0.1:11001; # id=1

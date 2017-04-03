@@ -1,0 +1,13 @@
+---
+
+- include: deploy_go.yml
+  tags:
+    - go
+
+- include: deploy_py.yml
+  tags:
+    - py
+
+- include: deploy_lua.yml
+  tags:
+    - lua

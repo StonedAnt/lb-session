@@ -1,0 +1,17 @@
+---
+
+- hosts: go_servers
+  vars:
+    pool_name: goservers
+#    rm_server_id: "id=10"
+#    rm_server_port: 10000
+  remote_user: root
+
+  roles:
+    - { role: "util", util_cmd: "remove"}
+
+  tasks:
+    - name: Remove go-server@{{ rm_server_port }}.service
+      shell: |
+        systemctl stop go-server@{{ rm_server_port }}.service
+        systemctl disable go-server@{{ rm_server_port }}.service

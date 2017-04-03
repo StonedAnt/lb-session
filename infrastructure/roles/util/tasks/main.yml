@@ -1,0 +1,56 @@
+---
+
+- name: Get info of current prod {{ pool_name }}
+  script: files/manage_servers.sh "{{ pool_name }}" get
+  register: pool_server_info_res
+  when: util_cmd=="get"
+
+- name: Set pool server info
+  set_fact: pool_server_info="{{ pool_server_info_res.stdout.split() }}"
+  when:
+    - util_cmd=="get"
+    - pool_server_info_res is defined
+
+  # set each erver var for clarity
+- name: Set next avail port
+  set_fact: pool_server_id="{{ pool_server_info[0] }}"
+  when:
+    - util_cmd=="get"
+    - pool_server_info_res is defined
+
+- name: Set next avail port
+  set_fact: pool_server_port="{{ pool_server_info[1] }}"
+  when:
+    - util_cmd=="get"
+    - pool_server_info_res is defined
+
+- name: Set next avail port
+  set_fact: pool_server_next_port="{{ pool_server_info[2] }}"
+  when:
+    - util_cmd=="get"
+    - pool_server_info_res is defined
+
+  # needed for deployments of new releases
+- name: Generate unique server dir 1/2 - set base
+  set_fact: unique_server_base="{{ pool_name }}_{{ 99999999999999 | random }}"
+  when:
+    - util_cmd=="get"
+    - pool_server_info_res is defined
+
+- name: Generate unique server dir 2/2 - generate unique dir name
+  set_fact: unique_server_dir_name="{{ unique_server_base | to_uuid }}"
+  when:
+    - util_cmd=="get"
+    - pool_server_info_res is defined
+
+- name: Add server on port {{ pool_server_next_port }} to {{ pool_name }}
+  script: files/manage_servers.sh "{{ pool_name }}" add "{{ pool_server_next_port }}"
+  when: util_cmd=="add"
+
+- name: Drain server {{ pool_server_id }} in {{ pool_name }}
+  script: files/manage_servers.sh "{{ pool_name }}" drain "{{ pool_server_id }}"
+  when: util_cmd=="drain"
+
+- name: Remove server {{ rm_server_id }} from {{ pool_name }}
+  script: files/manage_servers.sh "{{ pool_name }}" remove "{{ rm_server_id }}"
+  when: util_cmd=="remove"

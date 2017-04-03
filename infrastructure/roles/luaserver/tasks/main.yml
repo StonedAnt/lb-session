@@ -1,0 +1,33 @@
+---
+
+- name: Debug server info
+  debug: var=pool_server_info
+
+- name: Debug unique_server_dir_name
+  debug: var=unique_server_dir_name
+
+- name: Create deployment dir for new release
+  file:
+    path: "{{ server_root }}/{{ unique_server_dir_name }}"
+    state: directory
+
+- name: Upload release archive
+  unarchive:
+    copy: yes
+    src: files/lua-server.zip
+    dest: "{{ server_root }}/{{ unique_server_dir_name }}"
+
+- name: Add lapis config file
+  template:
+    src: roles/luaserver/templates/config.lua.j2
+    dest: "{{ server_root }}/{{ unique_server_dir_name }}/config.lua"
+
+- name: Create systemd service lua-server@{{ pool_server_next_port }}.service
+  template:
+    src: roles/luaserver/templates/systemd-service.j2
+    dest: /lib/systemd/system/lua-server@{{ pool_server_next_port }}.service
+
+- name: Start lua-server@{{ pool_server_next_port }}.service
+  shell: |
+    systemctl enable lua-server@{{ pool_server_next_port }}.service
+    systemctl start lua-server@{{ pool_server_next_port }}.service

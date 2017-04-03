@@ -1,0 +1,11 @@
+[Unit]
+Description=Python ASAPP Server
+After=network-online.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/python {{ server_root }}/{{ unique_server_dir_name }}/py-server.py {{ pool_server_next_port }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

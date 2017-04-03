@@ -1,0 +1,13 @@
+---
+
+- hosts: go_servers
+  vars:
+    server_root: /srv/go-servers
+    pool_name: goservers
+  remote_user: root
+
+  roles:
+    - { role: "util", util_cmd: "get" }
+    - { role: "goserver" }
+    - { role: "util", util_cmd: "add"}
+    - { role: "util", util_cmd: "drain"}

@@ -1,0 +1,17 @@
+---
+
+- hosts: lua_servers
+  vars:
+    pool_name: luaservers
+#    rm_server_id: "id=10"
+#    rm_server_port: 10000
+  remote_user: root
+
+  roles:
+    - { role: "util", util_cmd: "remove"}
+
+  tasks:
+    - name: Remove lua-server@{{ rm_server_port }}.service
+      shell: |
+        systemctl stop lua-server@{{ rm_server_port }}.service
+        systemctl disable lua-server@{{ rm_server_port }}.service

@@ -1,0 +1,13 @@
+---
+
+- hosts: py_servers
+  vars:
+    server_root: /srv/py-servers
+    pool_name: pyservers
+  remote_user: root
+
+  roles:
+      - { role: "util", util_cmd: "get" }
+      - { role: "pyserver" }
+      - { role: "util", util_cmd: "add"}
+      - { role: "util", util_cmd: "drain"}

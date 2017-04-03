@@ -1,0 +1,13 @@
+---
+
+- include: remove_go.yml
+  tags:
+    - go
+
+- include: remove_py.yml
+  tags:
+    - py
+
+- include: remove_lua.yml
+  tags:
+    - lua
